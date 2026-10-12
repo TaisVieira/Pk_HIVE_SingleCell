@@ -9,7 +9,7 @@ library(patchwork)
 so.h1a1 <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk_H1A1.rds")
 
 # =============================================================================
-# CREATE AP2-G-UP DATASET
+# AP2-G-UP DATASET
 # =============================================================================
 
 # Check AP2 expression
