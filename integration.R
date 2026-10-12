@@ -3,7 +3,7 @@ library(harmony)
 
 setwd('./Analysis/R analysis/Scripts')
 source('./util_funcs.R')
-setwd('./Analysis/Paper/pk')
+setwd('./Analysis/Paper/Pk_HIVE')
 
 # =============================================================================
 # LOAD DATA
@@ -73,6 +73,6 @@ create_3DPlot(so.integrated)
 
 saveRDS(
   so.integrated,
-  file = "C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_final.rds"
+  file = "/Analysis/Paper/Pk_HIVE/S.O.Pk_final.rds"
 )
 
