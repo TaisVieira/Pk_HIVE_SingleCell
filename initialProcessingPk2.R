@@ -6,10 +6,10 @@ library(openxlsx)
 library(Matrix)
 library(patchwork)
 
-setwd('C:/Users/taisb/OneDrive/Desktop/Analysis/R analysis/Scripts')
+setwd('./Analysis/R analysis/Scripts')
 source('./filterScrublet.R')
 source('./util_funcs.R')
-setwd('C:/Users/taisb/OneDrive/Desktop/Analysis/P_knowlesi/Pk2/')
+setwd('./Analysis/P_knowlesi/Pk2/')
 
 # =============================================================================
 # LOAD DATA AND CREATE INIITAL OBJECT
@@ -22,7 +22,7 @@ matrix <- readMM("merged/matrix/Pk2_matrix.mtx")
 colnames(matrix) <- barcodes[,1]
 rownames(matrix) <- features[,2]
 
-# Filter for cells with more than 500 reads
+# Filter for cells with more than 1000 reads
 matrix_filtered <- matrix[,colSums(matrix) > 1000]
 
 # Create object with genes present in at least 10 cells and
@@ -207,7 +207,7 @@ deg_clusters <- FindAllMarkers(so.final,  test.use = "wilcox", min.pct = 0.25,
                                min.diff.pct = 0.1, only.pos = TRUE)
 deg_clusters_filtered <- deg_clusters[deg_clusters$p_val_adj < 0.05,]
 all_markers <- add_gene_descriptions_from_gff_fast(deg_clusters_filtered, 
-                                                   "C:/Users/taisb/OneDrive/Desktop/Analysis/Genomes/Pk-68/PlasmoDB-68_PknowlesiH.gff")
+                                                   "./Analysis/Genomes/Pk-68/PlasmoDB-68_PknowlesiH.gff")
 deg_clusters_filtered$gene <- gsub("-", "_", deg_clusters_filtered$gene)
 write.xlsx(all_markers, file = "cluster_markers.xlsx", rowNames = FALSE)
 
@@ -217,7 +217,7 @@ write.xlsx(all_markers, file = "cluster_markers.xlsx", rowNames = FALSE)
 # =============================================================================
 
 saveRDS(so.final, 
-        "C:/Users/taisb/OneDrive/Desktop/Analysis/R analysis/RDS files/S.O.Pk2.rds")
+        "./Analysis/R analysis/RDS files/S.O.Pk2.rds")
 
 
 
