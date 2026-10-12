@@ -8,13 +8,13 @@ library(dplyr)
 setwd('./Analysis/R analysis/Scripts')
 source('./util_funcs.R')
 source('./analyzeSlingshot.R')
-setwd('./Analysis/Paper/pk')
+setwd('./Analysis/Paper/Pk_HIVE')
 
 # =============================================================================
 # LOAD DATA
 # =============================================================================
 
-so.pk <- readRDS("./Analysis/Paper/pk/S.O.Pk.integrated.rds")
+so.pk <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk.integrated.rds")
 
 # ============================================================================
 # FIND DEGs 
@@ -82,7 +82,7 @@ stage_map <- c(
 
 so.pk$stage <- unname(stage_map[as.character(so.pk$seurat_clusters)])
 
-#saveRDS(so.pk, "./Analysis/Paper/pk/S.O.Pk.integrated.rds")
+#saveRDS(so.pk, "./Analysis/Paper/Pk_HIVE/S.O.Pk.integrated.rds")
 
 # ============================================================================
 # TOP 5 MARKERS
