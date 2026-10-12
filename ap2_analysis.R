@@ -3,17 +3,16 @@ library(patchwork)
 library(pheatmap)
 library(ggplot2)
 
-setwd('C:/Users/taisb/OneDrive/Desktop/Analysis/R analysis/Scripts')
+setwd('./Analysis/R analysis/Scripts')
 source('./util_funcs.R')
 source('./pseudotime_funcs.R')
-setwd('C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk')
+setwd('./Analysis/Paper/Pk_HIVE')
 
 # =============================================================================
 # LOAD DATA
 # =============================================================================
 
-so.pk <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk.integrated.rds")
-so.pk <- subset(so.pk, idents = c(1:7))
+so.pk <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk.integrated.rds")
 
 # =============================================================================
 # AP2-G UP DATASET
@@ -34,14 +33,7 @@ plots <- lapply(seq_along(plots), function(i) {
 })
 wrap_plots(plots, ncol = 2)
 
-# # Create AP2-G Up dataset
-# set.seed(42)
-# genes <- c("PKNH-1441700", "PKNH-1350200")
-# so.pk <- AddModuleScore(so.pk, features = list(genes), name = "AP2_score")
-# #hist(so.pk$AP2_score1, breaks = 50)
-# ap2_up <- subset(so.pk, subset = AP2_score1 > quantile(AP2_score1, 0.97))
-# asexual <- subset(so.pk, subset = AP2_score1 < quantile(AP2_score1, 0.9))
-
+# Create AP2-G Up dataset
 genes <- c("PKNH-1441700", "PKNH-1350200")
 expr <- FetchData(so.pk, vars = genes, layer = "data") 
 cutoffs <- sapply(genes, function(g) quantile(expr[[g]], probs = 0.97, names = FALSE))
@@ -88,16 +80,16 @@ stage_colors <- c(
 )
 DimPlot(ap2_up, group.by = "stages", cols = stage_colors, dims = c(2,3))
 
-#saveRDS(ap2_up, "C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_AP2G_Up.rds")
-#saveRDS(asexual, "C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_asexual.rds")
+#saveRDS(ap2_up, "./Analysis/Paper/Pk_HIVE/S.O.Pk_AP2G_Up.rds")
+#saveRDS(asexual, "./Analysis/Paper/Pk_HIVE/S.O.Pk_asexual.rds")
 
 # =============================================================================
 # COMPARATIVE ANALYSIS
 # =============================================================================
 
-so.gam <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk.integrated_gametocytes.rds")
-ap2_up <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_AP2G_Up.rds")
-asexual <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_asexual.rds")
+so.gam <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk.integrated_gametocytes.rds")
+ap2_up <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk_AP2G_Up.rds")
+asexual <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk_asexual.rds")
 
 DefaultAssay(so.gam)  <- "RNA"
 DefaultAssay(ap2_up)  <- "RNA"
@@ -136,7 +128,7 @@ avg_ap2up   <- get_avg_exp(ap2_up,  genes_final)
 avg_asexual <- get_avg_exp(asexual, genes_final)
 avg_gam     <- get_avg_exp(so.gam,  genes_final)
 
-# inal matrix: mean across clusters of each object
+# Final matrix: mean across clusters of each object
 heatmap_matrix <- cbind(
   AP2up     = rowMeans(avg_ap2up),
   Asexual   = rowMeans(avg_asexual),
@@ -192,12 +184,7 @@ plotPseudotimeGenes <- function(genes,
                                 ncol = 4,
                                 title = NULL,
                                 use_rank = TRUE) {
-  
-  if (!all(names(objs) %in% names(pseudotime_cols))) {
-    stop("pseudotime_cols must have a name for each object in objs: ",
-         paste(names(objs), collapse = ", "))
-  }
-  
+    
   plots <- list()
   
   for (gene in genes) {
@@ -205,22 +192,9 @@ plotPseudotimeGenes <- function(genes,
       obj <- objs[[obj_name]]
       pt_col <- pseudotime_cols[[obj_name]]
       
-      if (!gene %in% rownames(obj)) {
-        warning("Gene ", gene, " not found in ", obj_name, ", skipping.")
-        next
-      }
-      if (!pt_col %in% colnames(obj@meta.data)) {
-        stop("Column '", pt_col, "' not found in the metadata of ", obj_name)
-      }
-      
       df <- FetchData(obj, vars = c(pt_col, gene))
       colnames(df) <- c("Pseudotime", "Expression")
       df <- df[is.finite(df$Pseudotime), , drop = FALSE]
-      
-      if (nrow(df) == 0) {
-        warning("No cells with valid pseudotime in ", obj_name, ", skipping ", gene)
-        next
-      }
       
       # Replace pseudotime values by cell order (1 = earliest cell)
       if (use_rank) {
@@ -242,11 +216,11 @@ plotPseudotimeGenes <- function(genes,
   out <- wrap_plots(plots, ncol = ncol) +
     plot_annotation(title = title)
   
-  attr(out, "n_panels") <- length(plots)   # used later to size the image
+  attr(out, "n_panels") <- length(plots)   
   out
 }
 
-# Pseudotime column for each object (edit these names)
+# Pseudotime column for each object 
 pt_cols <- c(`All cells` = "idc_pseudotime",
              Asexual     = "idc_pseudotime",    
              `AP2-G-Up`  = "idc_pseudotime",
