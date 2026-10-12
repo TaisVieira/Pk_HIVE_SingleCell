@@ -3,10 +3,18 @@ library(Seurat)
 library(ggplot2)
 library(patchwork)
 
-so.pk <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk.integrated.rds")
-so.h1a1 <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_erin.rds")
-ap2_up <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_AP2G_Up.rds")
-ap2_h1a1 <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_AP2G_Up_Erin.rds")
+# =============================================================================
+# LOAD DATA
+# =============================================================================
+
+so.pk <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk.integrated.rds")
+so.h1a1 <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk_H1A1.rds")
+ap2_up <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk_AP2G_Up.rds")
+ap2_h1a1 <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk_AP2G_Up_H1A1.rds")
+
+# =============================================================================
+# COMPARE DATASETS
+# =============================================================================
 
 compare_expression <- function(obj1, obj2, fc_threshold = 10, top_n = 10,
                                pseudo = 1e-6, assay = NULL, layer = "data") {
@@ -15,7 +23,7 @@ compare_expression <- function(obj1, obj2, fc_threshold = 10, top_n = 10,
   
   get_mat <- function(obj) {
     a <- if (is.null(assay)) DefaultAssay(obj) else assay
-    GetAssayData(obj, assay = a, layer = layer)[genes, , drop = FALSE]  # use slot= on Seurat v4
+    GetAssayData(obj, assay = a, layer = layer)[genes, , drop = FALSE]  
   }
   
   avg1 <- Matrix::rowMeans(get_mat(obj1))
@@ -139,8 +147,6 @@ plotCompareGenes <- function(genes,
   plots <- Filter(Negate(is.null), plots)
   wrap_plots(plots, ncol = ncol)
 }
-
-
 
 plotCompareGenes(c(full_obj$higher_in_obj1$gene, full_obj$higher_in_obj2$gene, "PKNH-1324400"), 
                  so.pk, so.h1a1, group_labels = c("H", "H1A1"))
