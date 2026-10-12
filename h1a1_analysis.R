@@ -2,7 +2,7 @@ library(Seurat)
 library(ggplot2)
 library(patchwork)
 
-so.h1a1 <- readRDS("C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_erin.rds")
+so.h1a1 <- readRDS("./Analysis/Paper/Pk_HIVE/S.O.Pk_H1A1.rds")
 
 # Check AP2 expression
 ap2 <- c(
@@ -30,9 +30,8 @@ cells.keep <- rownames(expr)[keep]
 ap2_up <- subset(so.h1a1, cells = cells.keep)
 asexual <- subset(so.h1a1, cells = rownames(expr)[!keep])
 
-
-#saveRDS(ap2_up, "C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_AP2G_Up_Erin.rds")
-#saveRDS(asexual, "C:/Users/taisb/OneDrive/Desktop/Analysis/Paper/pk/S.O.Pk_asexual_Erin.rds")
+saveRDS(ap2_up, "./Analysis/Paper/Pk_HIVE/S.O.Pk_AP2G_Up_Erin.rds")
+saveRDS(asexual, "./Analysis/Paper/Pk_HIVE/S.O.Pk_asexual_Erin.rds")
 
 # =============================================================================
 # SUPPLEMENTARY FIGURE 8
