@@ -7,7 +7,7 @@ library(purrr)
 setwd('./Analysis/R analysis/Scripts')
 source('./util_funcs.R')
 source('./pseudotime_funcs.R')
-setwd('./Analysis/Paper/pk')
+setwd('./Analysis/Paper/Pk_HIVE')
 
 # =============================================================================
 # LOAD DATA
@@ -63,7 +63,7 @@ wrap_plots(
   ncol = 2
 )
 
-saveRDS(so.gam, "./Paper/pk/S.O.Pk.integrated_gametocytes.rds")
+saveRDS(so.gam, "./Paper/Pk_HIVE/S.O.Pk.integrated_gametocytes.rds")
 
 # ============================================================================
 # FIND DEGs 
